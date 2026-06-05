@@ -1,37 +1,19 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import api from "../services/api";
+import { movies } from "../data/movies";
 
 function MovieInfo() {
-
   const { id } = useParams();
 
-  const [movie, setMovie] = useState(null);
-
-  useEffect(() => {
-    getMovie();
-  }, []);
-
-  async function getMovie() {
-    try {
-
-      const response =
-        await api.get(`/movies/${id}`);
-
-      setMovie(response.data);
-
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  const movie = movies.find(
+    (movie) => movie.id === Number(id)
+  );
 
   if (!movie) {
-    return <h2>Loading...</h2>;
+    return <h2>Movie Not Found</h2>;
   }
 
   return (
     <div className="details">
-
       <img
         src={movie.image}
         alt={movie.name}
@@ -48,8 +30,7 @@ function MovieInfo() {
       <p>{movie.year}</p>
 
       <h3>Rating</h3>
-      <p>{movie.rating}</p>
-
+      <p>⭐ {movie.rating}</p>
     </div>
   );
 }
